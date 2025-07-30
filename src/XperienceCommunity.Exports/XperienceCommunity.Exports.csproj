@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<AdminOrgName>xperiencecommunity-exports</AdminOrgName>
+	</PropertyGroup>
+	<ItemGroup>
+		<AdminClientPath Include="Client\dist\**">
+			<ProjectName>web-admin</ProjectName>
+		</AdminClientPath>
+	</ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="CsvHelper" Version="33.1.0" />
+		<PackageReference Include="kentico.xperience.admin" Version="30.8.0" />
+	</ItemGroup>
+</Project>
