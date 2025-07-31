@@ -13,8 +13,8 @@
     The SQL Server instance name (default: "localhost")
 
 .EXAMPLE
-    .\DancingGoat-Setup2.ps1
-    .\DancingGoat-Setup2.ps1 -ProjectName "MyDancingGoat" -SqlServerName ".\SQLEXPRESS"
+    .\Init-DancingGoat.ps1
+    .\Init-DancingGoat.ps1 -ProjectName "MyDancingGoat" -SqlServerName ".\SQLEXPRESS"
 #>
 
 [CmdletBinding()]
