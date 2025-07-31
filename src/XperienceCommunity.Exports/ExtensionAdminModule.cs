@@ -1,8 +1,4 @@
-﻿using CMS.Base;
-using CMS.Core;
-using CMS.EmailLibrary.Internal;
-using CMS.OnlineForms;
-using Kentico.Xperience.Admin.Base;
+﻿using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.Exports;
 
 [assembly: CMS.AssemblyDiscoverable]

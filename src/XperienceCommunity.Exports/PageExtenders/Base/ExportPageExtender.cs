@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CMS.Base;
 using CsvHelper;
 using Kentico.Xperience.Admin.Base;
-using XperienceCommunity.Exports.Components;
+using XperienceCommunity.Exports.Components.DataExport;
 
 namespace XperienceCommunity.Exports.PageExtenders.Base;
 
