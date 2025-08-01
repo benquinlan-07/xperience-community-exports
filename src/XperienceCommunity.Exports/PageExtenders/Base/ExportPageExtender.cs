@@ -67,7 +67,7 @@ public abstract class ExportPageExtender<TPage> : PageExtender<TPage> where TPag
             {
                 if (CanExportColumn(column))
                 {
-                    dict[column] = dc.TryGetValue(column, out object? value)
+                    dict[column] = dc.TryGetValue(column, out object value)
                         ? value?.ToString() ?? ""
                         : "";
 
