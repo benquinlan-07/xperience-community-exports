@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
@@ -27,23 +27,29 @@ public abstract class ExportPageExtender<TPage> : PageExtender<TPage> where TPag
     {
         await base.ConfigurePage();
 
-        var component = new DataExportComponent()
+        var canSeeExportAction = await CanSeeExportAction();
+        if (canSeeExportAction)
         {
-            Properties = new DataExportProperties
+            var component = new DataExportComponent()
             {
-                CommandName = EXPORT_COMMAND,
-                FileNamePrefix = await GetFileNamePrefix()
-            }
-        };
+                Properties = new DataExportProperties
+                {
+                    CommandName = EXPORT_COMMAND,
+                    FileNamePrefix = await GetFileNamePrefix()
+                }
+            };
 
-        var result = await _permissionEvaluator.Evaluate(Permissions.Name);
+            var result = await _permissionEvaluator.Evaluate(Permissions.Name);
 
-        _ = Page.PageConfiguration
-            .HeaderActions
-            .AddActionWithCustomComponent(component, $"Export", disabled: !result.Succeeded, icon: "xp-arrow-down-line", title: "export");
+            _ = Page.PageConfiguration
+                .HeaderActions
+                .AddActionWithCustomComponent(component, $"Export", disabled: !result.Succeeded, icon: "xp-arrow-down-line", title: "export");
+        }
     }
 
     protected abstract Task<string> GetFileNamePrefix();
+
+    protected virtual Task<bool> CanSeeExportAction() => Task.FromResult(true);
 
     protected virtual bool CanExportColumn(string columnName) => true;
 

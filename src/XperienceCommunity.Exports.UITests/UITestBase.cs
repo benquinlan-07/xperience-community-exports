@@ -27,7 +27,7 @@ public abstract class UITestBase
         var service = EdgeDriverService.CreateDefaultService(AppDomain.CurrentDomain.BaseDirectory);
         WebDriver = new EdgeDriver(service, edgeOptions);
 
-        WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+        WebDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Constants.DefaultImplicitWaitTimeSeconds);
     }
 
     protected void TearDownDriver()

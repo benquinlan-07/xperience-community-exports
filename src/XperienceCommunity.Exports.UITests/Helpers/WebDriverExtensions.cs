@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using OpenQA.Selenium;
 
 namespace XperienceCommunity.Exports.UITests.Helpers
@@ -23,6 +23,38 @@ namespace XperienceCommunity.Exports.UITests.Helpers
         public static ReadOnlyCollection<IWebElement> FindAllByAttribute(this IWebElement input, string attributeName, string attributeValue)
         {
             return input.FindElements(By.CssSelector($"[{attributeName}=\"{attributeValue}\"]"));
+        }
+
+        public static void WithReducedWaitTime(this WebDriver driver, Action<WebDriver> action, int reducedWaitTimeSeconds = 1)
+        {
+            try
+            {
+                // Reduce wait time
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(reducedWaitTimeSeconds);
+                // Perform action
+                action(driver);
+            }
+            finally
+            {
+                // Reset to default wait time
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Constants.DefaultImplicitWaitTimeSeconds); 
+            }
+        }
+
+        public static T WithReducedWaitTime<T>(this WebDriver driver, Func<WebDriver, T> func, int reducedWaitTimeSeconds = 1)
+        {
+            try
+            {
+                // Reduce wait time
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(reducedWaitTimeSeconds);
+                // Perform action
+                return func(driver);
+            }
+            finally
+            {
+                // Reset to default wait time
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(Constants.DefaultImplicitWaitTimeSeconds);
+            }
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
+using CMS.DataEngine.Query;
 using CMS.OnlineForms;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.DigitalMarketing.UIPages;
@@ -18,6 +19,13 @@ public class FormSubmissionsTabExtender : ExportPageExtender<FormSubmissionsTab>
     public FormSubmissionsTabExtender(IUIPermissionEvaluator permissionEvaluator)
         : base(permissionEvaluator)
     {
+    }
+
+    protected override async Task<bool> CanSeeExportAction()
+    {
+        var data = await GetFormDataFromPage();
+        var count = await BizFormItemProvider.GetItems(data.dataClass.ClassName).TopN(1).GetCountAsync();
+        return count > 0;
     }
 
     private async Task<(BizFormInfo form, DataClassInfo dataClass)> GetFormDataFromPage(CancellationToken cancellationToken = default)

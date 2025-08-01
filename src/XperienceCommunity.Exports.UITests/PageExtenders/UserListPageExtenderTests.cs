@@ -12,7 +12,7 @@ namespace XperienceCommunity.Exports.UITests.PageExtenders
         }
 
         [Test]
-        public void Export_Works()
+        public void Export_Button_Triggers_Download()
         {
             // Sign in to admin
             NavigationHelpers.SignInToAdmin(WebDriver);

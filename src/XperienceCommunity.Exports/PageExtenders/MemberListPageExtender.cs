@@ -1,6 +1,8 @@
-﻿using System.Threading;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
+using CMS.DataEngine.Query;
 using CMS.Membership;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.UIPages;
@@ -21,6 +23,12 @@ public class MemberListPageExtender : ExportPageExtender<MemberList>
         : base(permissionEvaluator)
     {
         _memberInfoProvider = memberInfoProvider;
+    }
+
+    protected override async Task<bool> CanSeeExportAction()
+    {
+        var count = await _memberInfoProvider.Get().GetCountAsync();
+        return count > 0;
     }
 
     protected override Task<string> GetFileNamePrefix() => Task.FromResult("Members");

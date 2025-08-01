@@ -1,6 +1,7 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
+using CMS.DataEngine.Query;
 using CMS.OnlineForms;
 using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.DigitalMarketing.UIPages;
@@ -21,6 +22,12 @@ public class FormListPageExtender : ExportPageExtender<FormList>
         : base(permissionEvaluator)
     {
         _bizFormInfoProvider = bizFormInfoProvider;
+    }
+
+    protected override async Task<bool> CanSeeExportAction()
+    {
+        var count = await _bizFormInfoProvider.Get().GetCountAsync();
+        return count > 0;
     }
 
     protected override Task<string> GetFileNamePrefix() => Task.FromResult("Forms");
