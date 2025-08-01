@@ -7,7 +7,7 @@ module.exports = (opts, argv) => {
     return baseWebpackConfig({
       // Sets the organizationName and projectName
       // The JS module is registered on the backend using these values
-      orgName: "xperiencecommunity-exports",
+      orgName: "xperiencecommunityexports",
       projectName: "web-admin",
       webpackConfigEnv: webpackConfigEnv,
       argv: argv,

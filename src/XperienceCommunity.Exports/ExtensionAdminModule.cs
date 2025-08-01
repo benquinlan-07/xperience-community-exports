@@ -1,4 +1,4 @@
-﻿using Kentico.Xperience.Admin.Base;
+using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.Exports;
 
 [assembly: CMS.AssemblyDiscoverable]
@@ -18,6 +18,6 @@ internal class ExtensionAdminModule : AdminModule
         base.OnInit();
 
         // Makes the module accessible to the admin UI
-        RegisterClientModule("xperiencecommunity-exports", "web-admin");
+        RegisterClientModule("xperiencecommunityexports", "web-admin");
     }
 }

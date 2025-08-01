@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<AdminOrgName>xperiencecommunity-exports</AdminOrgName>
+		<AdminOrgName>xperiencecommunityexports</AdminOrgName>
 	</PropertyGroup>
 	<ItemGroup>
 		<AdminClientPath Include="Client\dist\**">
