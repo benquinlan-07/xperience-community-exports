@@ -40,7 +40,7 @@ public abstract class ExportPageExtender<TPage> : PageExtender<TPage> where TPag
 
         _ = Page.PageConfiguration
             .HeaderActions
-            .AddActionWithCustomComponent(component, $"Export", disabled: !result.Succeeded);
+            .AddActionWithCustomComponent(component, $"Export", disabled: !result.Succeeded, icon: "xp-arrow-down-line", title: "export");
     }
 
     protected abstract Task<string> GetFileNamePrefix();

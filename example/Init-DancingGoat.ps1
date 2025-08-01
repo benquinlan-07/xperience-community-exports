@@ -124,6 +124,63 @@ function Install-ProjectTemplate {
     Write-Host "Restoring packages..." -ForegroundColor Cyan
     dotnet restore
     dotnet tool restore
+    
+    # Merge template.appsettings.json with appsettings.json
+    $scriptDirectory = Split-Path -Parent $MyInvocation.ScriptName
+    $templatePath = Join-Path $scriptDirectory "template.appsettings.json"
+    $targetPath = "appsettings.json"
+    
+    if (Test-Path $templatePath) {
+        Write-Host "Merging template.appsettings.json with appsettings.json..." -ForegroundColor Yellow
+        
+        try {
+            # Read both JSON files
+            $templateJson = Get-Content -Path $templatePath -Raw | ConvertFrom-Json
+            $targetJson = if (Test-Path $targetPath) { 
+                Get-Content -Path $targetPath -Raw | ConvertFrom-Json 
+            } else { 
+                @{} 
+            }
+            
+            # Merge template settings into target (template takes precedence for existing keys)
+            function Merge-HashTables($target, $source) {
+                foreach ($key in $source.PSObject.Properties.Name) {
+                    if ($target.PSObject.Properties.Name -contains $key) {
+                        if ($source.$key -is [PSCustomObject] -and $target.$key -is [PSCustomObject]) {
+                            # Recursively merge nested objects
+                            Merge-HashTables $target.$key $source.$key
+                        } else {
+                            # Override with template value
+                            $target.$key = $source.$key
+                        }
+                    } else {
+                        # Add new property from template
+                        $target | Add-Member -NotePropertyName $key -NotePropertyValue $source.$key -Force
+                    }
+                }
+            }
+            
+            Merge-HashTables $targetJson $templateJson
+            
+            # Write merged JSON back to appsettings.json
+            $mergedJson = $targetJson | ConvertTo-Json -Depth 10
+            Set-Content -Path $targetPath -Value $mergedJson -Encoding UTF8
+            
+            Write-Host "✅ appsettings.json updated successfully" -ForegroundColor Green
+        }
+        catch {
+            Write-Warning "Failed to merge appsettings files: $_"
+        }
+    } else {
+        Write-Host "No template.appsettings.json found - skipping merge" -ForegroundColor Gray
+    }
+    
+    # Replace launchSettings.json with template.launchSettings.json
+    Write-Host "Replacing launchSettings.json with template.launchSettings.json..." -ForegroundColor Yellow
+    $launchSettingsTemplatePath = Join-Path $scriptDirectory "template.launchSettings.json"
+    $launchSettingsTargetPath = "Properties/launchSettings.json"
+    Copy-Item -Path $launchSettingsTemplatePath -Destination $launchSettingsTargetPath -Force
+    Write-Host "✅ launchSettings.json updated successfully" -ForegroundColor Green
 }
 
 function Initialize-Database {
@@ -161,6 +218,19 @@ function Add-CommunityPackages {
     dotnet new sln -n $Config.ProjectName
     dotnet sln add "$($Config.ProjectName)\$($Config.ProjectName).csproj"
     
+    # Copy Run-UITests.ps1 script to the solution directory
+    $scriptDirectory = Split-Path -Parent $MyInvocation.ScriptName
+    $sourceScriptPath = Join-Path $scriptDirectory "Run-UITests.ps1"
+    $destinationScriptPath = ".\Run-UITests.ps1"
+    
+    if (Test-Path $sourceScriptPath) {
+        Write-Host "Copying Run-UITests.ps1 script to solution directory..." -ForegroundColor Yellow
+        Copy-Item -Path $sourceScriptPath -Destination $destinationScriptPath -Force
+        Write-Host "✅ Run-UITests.ps1 copied successfully" -ForegroundColor Green
+    } else {
+        Write-Warning "Run-UITests.ps1 not found at: $sourceScriptPath"
+    }
+    
     # Get and add community packages
     $packageProjectFiles = Get-CsprojFiles
     
@@ -171,7 +241,7 @@ function Add-CommunityPackages {
         # Only add references for non-test projects
         if (-not $file.FullName.EndsWith("Tests.csproj")) {
             Write-Host "    Adding reference to: $($file.Name)" -ForegroundColor Gray
-            dotnet add reference $file.FullName
+            dotnet add "$($Config.ProjectName)\$($Config.ProjectName).csproj" reference $file.FullName
         }
     }
 }
