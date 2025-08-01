@@ -36,19 +36,14 @@ Install-Package XperienceCommunity.Exports
 
 1. Install the NuGet package.
 
-## Full Instructions
+1. Login to the admin and look for the export button on any of the following applications:
 
-1. Start your XbyK website.
-
-1. Log in to the administration site.
-
-1. Create or edit a form.
-
-1. Add the form to the website and submit data to the form
-
-1. View the form submissions
-
-1. Use the export button to download form submission data
+    - Users
+    - Members
+    - Orders
+    - Customers
+    - Forms
+    - Form Submissions
 
 ## Adding Export to Listing Pages
 
