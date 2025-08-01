@@ -1,11 +1,17 @@
-[!NOTE]  
-This package is still under development.
-
 # Xperience Community: Exports
 
 ## Description
 
-This package provides Xperience by Kentico administrators with an option to export data across various listing interfaces. This package also enables developers to easily extend and add the export functionality to any other listing page within the administration.
+This package provides Xperience by Kentico administrators with an option to export data across various listing interfaces. The implementation also allows for developers to easily extend the implementation to allow for exporting across other listing pages within the administration.
+
+![Xperience by Kentico Exports](https://raw.githubusercontent.com/benquinlan-07/xperience-community-exports/refs/heads/main/images/export-users.png)
+
+## Library Version Matrix
+
+| Xperience Version | Library Version |
+| ----------------- | --------------- |
+| >= 30.8.0         | 1.0.0           |
+
 
 ### Dependencies
 
@@ -43,3 +49,12 @@ Install-Package XperienceCommunity.Exports
 1. View the form submissions
 
 1. Use the export button to download form submission data
+
+## Adding Export to Listing Pages
+
+As per the implementations in this repository, simply create a class that extends from the `XperienceCommunity.Exports.PageExtenders.Base.ExportPageExtender<>` class and implement any required methods.
+
+Don't forget to register the page extender with an assembly attribute
+````csharp
+[assembly: PageExtender(typeof(UserListPageExtender))]
+````
