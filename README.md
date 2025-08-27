@@ -53,3 +53,12 @@ Don't forget to register the page extender with an assembly attribute
 ````csharp
 [assembly: PageExtender(typeof(UserListPageExtender))]
 ````
+
+## Transformers
+
+Transformers can be used to transform data prior to exporting. Transformers can be implemented and registered using the `XperienceCommunity.Exports.Transformers.IExportDataTransformer` interface.
+
+An implementation is included in the project already for replacing form file data in form submissions with a URL to get the file.
+````csharp
+builder.Services.AddTransient<IExportDataTransformer, FormSubmissionFileUrlDataTransformer>();
+````
