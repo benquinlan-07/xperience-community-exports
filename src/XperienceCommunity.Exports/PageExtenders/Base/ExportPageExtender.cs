@@ -6,19 +6,24 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.Base;
+using CommandLine.Text;
 using CsvHelper;
 using Kentico.Xperience.Admin.Base;
 using XperienceCommunity.Exports.Components.DataExport;
+using XperienceCommunity.Exports.Transformers;
 
 namespace XperienceCommunity.Exports.PageExtenders.Base;
 
 public abstract class ExportPageExtender<TPage> : PageExtender<TPage> where TPage : ListingPage
 {
     private readonly IUIPermissionEvaluator _permissionEvaluator;
+    private readonly IEnumerable<IExportDataTransformer> _exportTransformations;
 
-    protected ExportPageExtender(IUIPermissionEvaluator permissionEvaluator)
+    protected ExportPageExtender(IUIPermissionEvaluator permissionEvaluator,
+        IEnumerable<IExportDataTransformer> exportTransformations)
     {
         _permissionEvaluator = permissionEvaluator;
+        _exportTransformations = exportTransformations;
     }
 
     public const string EXPORT_COMMAND = "EXPORT_LIST";
@@ -57,6 +62,16 @@ public abstract class ExportPageExtender<TPage> : PageExtender<TPage> where TPag
 
     protected async Task<ICommandResponse> Export(IEnumerable<IDataContainer> data, CancellationToken cancellationToken = default)
     {
+        if (_exportTransformations != null)
+        {
+            foreach (var exportTransformation in _exportTransformations)
+            {
+                var transformed = await exportTransformation.Transform(Page, data);
+                if (transformed != null)
+                    data = transformed;
+            }
+        }
+
         var dataItems = new List<dynamic>();
 
         foreach (var dc in data)

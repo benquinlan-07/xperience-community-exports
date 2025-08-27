@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.Commerce;
@@ -7,6 +8,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.DigitalCommerce.UIPages;
 using XperienceCommunity.Exports.PageExtenders;
 using XperienceCommunity.Exports.PageExtenders.Base;
+using XperienceCommunity.Exports.Transformers;
 
 [assembly: PageExtender(typeof(OrdersListPageExtender))]
 
@@ -18,8 +20,9 @@ public class OrdersListPageExtender : ExportPageExtender<OrdersList>
     private readonly IInfoProvider<OrderInfo> _orderInfoProvider;
 
     public OrdersListPageExtender(IUIPermissionEvaluator permissionEvaluator,
-        IInfoProvider<OrderInfo> orderInfoProvider)
-        : base(permissionEvaluator)
+        IInfoProvider<OrderInfo> orderInfoProvider,
+        IEnumerable<IExportDataTransformer> exportTransformations)
+        : base(permissionEvaluator, exportTransformations)
     {
         _orderInfoProvider = orderInfoProvider;
     }

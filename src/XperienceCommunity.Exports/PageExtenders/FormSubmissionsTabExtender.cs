@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.DigitalMarketing.UIPages;
 using XperienceCommunity.Exports.PageExtenders;
 using XperienceCommunity.Exports.PageExtenders.Base;
+using XperienceCommunity.Exports.Transformers;
 
 [assembly: PageExtender(typeof(FormSubmissionsTabExtender))]
 
@@ -16,8 +18,10 @@ namespace XperienceCommunity.Exports.PageExtenders;
 [UIPermission(Permissions.Name, Permissions.DisplayName)]
 public class FormSubmissionsTabExtender : ExportPageExtender<FormSubmissionsTab>
 {
-    public FormSubmissionsTabExtender(IUIPermissionEvaluator permissionEvaluator)
-        : base(permissionEvaluator)
+
+    public FormSubmissionsTabExtender(IUIPermissionEvaluator permissionEvaluator,
+        IEnumerable<IExportDataTransformer> exportTransformations)
+        : base(permissionEvaluator, exportTransformations)
     {
     }
 

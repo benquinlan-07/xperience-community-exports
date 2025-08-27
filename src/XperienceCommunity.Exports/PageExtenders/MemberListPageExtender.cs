@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.UIPages;
 using XperienceCommunity.Exports.PageExtenders;
 using XperienceCommunity.Exports.PageExtenders.Base;
+using XperienceCommunity.Exports.Transformers;
 
 [assembly: PageExtender(typeof(MemberListPageExtender))]
 
@@ -19,8 +21,9 @@ public class MemberListPageExtender : ExportPageExtender<MemberList>
     private readonly IInfoProvider<MemberInfo> _memberInfoProvider;
 
     public MemberListPageExtender(IUIPermissionEvaluator permissionEvaluator,
-        IInfoProvider<MemberInfo> memberInfoProvider)
-        : base(permissionEvaluator)
+        IInfoProvider<MemberInfo> memberInfoProvider,
+        IEnumerable<IExportDataTransformer> exportTransformations)
+        : base(permissionEvaluator, exportTransformations)
     {
         _memberInfoProvider = memberInfoProvider;
     }

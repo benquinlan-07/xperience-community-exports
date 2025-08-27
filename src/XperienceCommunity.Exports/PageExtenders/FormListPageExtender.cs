@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
@@ -7,6 +8,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.DigitalMarketing.UIPages;
 using XperienceCommunity.Exports.PageExtenders;
 using XperienceCommunity.Exports.PageExtenders.Base;
+using XperienceCommunity.Exports.Transformers;
 
 [assembly: PageExtender(typeof(FormListPageExtender))]
 
@@ -18,8 +20,9 @@ public class FormListPageExtender : ExportPageExtender<FormList>
     private readonly IInfoProvider<BizFormInfo> _bizFormInfoProvider;
 
     public FormListPageExtender(IUIPermissionEvaluator permissionEvaluator,
-        IInfoProvider<BizFormInfo> bizFormInfoProvider)
-        : base(permissionEvaluator)
+        IInfoProvider<BizFormInfo> bizFormInfoProvider,
+        IEnumerable<IExportDataTransformer> exportTransformations)
+        : base(permissionEvaluator, exportTransformations)
     {
         _bizFormInfoProvider = bizFormInfoProvider;
     }

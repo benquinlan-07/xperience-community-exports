@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CMS.DataEngine;
@@ -7,6 +8,7 @@ using Kentico.Xperience.Admin.Base;
 using Kentico.Xperience.Admin.Base.UIPages;
 using XperienceCommunity.Exports.PageExtenders;
 using XperienceCommunity.Exports.PageExtenders.Base;
+using XperienceCommunity.Exports.Transformers;
 
 [assembly: PageExtender(typeof(UserListPageExtender))]
 
@@ -18,8 +20,9 @@ public class UserListPageExtender : ExportPageExtender<UserList>
     private readonly IInfoProvider<UserInfo> _userInfoProvider;
 
     public UserListPageExtender(IUIPermissionEvaluator permissionEvaluator,
-        IInfoProvider<UserInfo> userInfoProvider)
-        : base(permissionEvaluator)
+        IInfoProvider<UserInfo> userInfoProvider,
+        IEnumerable<IExportDataTransformer> exportTransformations)
+        : base(permissionEvaluator, exportTransformations)
     {
         _userInfoProvider = userInfoProvider;
     }
